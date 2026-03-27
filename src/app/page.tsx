@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import HeroSection from "@/components/HeroSection";
 import ScrollCards from "@/components/ScrollCards";
-import ScrollProgress from "@/components/ScrollProgress";
+import TimelineScrubber from "@/components/TimelineScrubber";
 
 const MapContainer = dynamic(() => import("@/components/MapContainer"), {
   ssr: false,
@@ -17,18 +17,33 @@ const MapContainer = dynamic(() => import("@/components/MapContainer"), {
 
 export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [scrubberVisible, setScrubberVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   const handleActiveChange = useCallback((index: number) => {
     setActiveIndex(index);
   }, []);
 
+  // Show scrubber only when the scrollytelling section is in view
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setScrubberVisible(entry.isIntersecting),
+      { threshold: 0.05 }
+    );
+    observer.observe(section);
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <main>
-      <ScrollProgress />
+      <TimelineScrubber activeIndex={activeIndex} visible={scrubberVisible} />
       <HeroSection />
 
       {/* Scrollytelling section */}
-      <section className="relative">
+      <section ref={sectionRef} className="relative">
         <div className="flex flex-col md:flex-row">
           {/* Map — sticky on desktop, sticky on mobile too (shorter height) */}
           <div className="sticky top-0 z-10 h-[40vh] w-full md:h-screen md:w-[60%]">

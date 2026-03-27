@@ -1,0 +1,167 @@
+"use client";
+
+import { useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { timelineEvents } from "@/data/timeline";
+import type { Phase } from "@/lib/constants";
+
+interface TimelineScrubberProps {
+  activeIndex: number;
+  visible: boolean;
+}
+
+const PHASE_BAR_COLORS: Record<Phase, string> = {
+  gathering: "bg-blue-500",
+  escalation: "bg-amber-500",
+  curfew: "bg-red-600",
+  aftermath: "bg-zinc-500",
+};
+
+const PHASE_DOT_COLORS: Record<Phase, string> = {
+  gathering: "bg-blue-500 shadow-blue-500/50",
+  escalation: "bg-amber-500 shadow-amber-500/50",
+  curfew: "bg-red-600 shadow-red-600/50",
+  aftermath: "bg-zinc-500 shadow-zinc-500/50",
+};
+
+function timeToMinutes(time: string): number {
+  const [h, m] = time.split(":").map(Number);
+  return h * 60 + m;
+}
+
+const startMin = timeToMinutes(timelineEvents[0].time);
+const endMin = timeToMinutes(timelineEvents[timelineEvents.length - 1].time);
+const totalSpan = endMin - startMin;
+
+// Key tick marks to display
+const TICKS = [
+  { time: "08:23", label: "८ः२३", labelEn: "8:23 AM" },
+  { time: "10:00", label: "१०ः००", labelEn: "10 AM" },
+  { time: "11:00", label: "११ः००", labelEn: "11 AM" },
+  { time: "12:30", label: "१२ः३०", labelEn: "12:30 PM" },
+  { time: "14:00", label: "१४ः००", labelEn: "2 PM" },
+  { time: "16:00", label: "१६ः००", labelEn: "4 PM" },
+  { time: "18:15", label: "१८ः१५", labelEn: "6:15 PM" },
+];
+
+// Build phase segments as percentage ranges
+function buildPhaseSegments() {
+  const phases: { phase: Phase; startPct: number; endPct: number }[] = [];
+  let currentPhase = timelineEvents[0].phase;
+  let segStart = 0;
+
+  for (let i = 1; i < timelineEvents.length; i++) {
+    if (timelineEvents[i].phase !== currentPhase) {
+      const prevMin = timeToMinutes(timelineEvents[i - 1].time);
+      const curMin = timeToMinutes(timelineEvents[i].time);
+      const boundary = ((prevMin + curMin) / 2 - startMin) / totalSpan;
+      phases.push({ phase: currentPhase, startPct: segStart, endPct: boundary });
+      segStart = boundary;
+      currentPhase = timelineEvents[i].phase;
+    }
+  }
+  phases.push({ phase: currentPhase, startPct: segStart, endPct: 1 });
+  return phases;
+}
+
+const phaseSegments = buildPhaseSegments();
+
+export default function TimelineScrubber({
+  activeIndex,
+  visible,
+}: TimelineScrubberProps) {
+  const activeEvent = timelineEvents[activeIndex] ?? timelineEvents[0];
+
+  const progressPct = useMemo(() => {
+    const min = timeToMinutes(activeEvent.time);
+    return ((min - startMin) / totalSpan) * 100;
+  }, [activeEvent.time]);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ y: -60, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -60, opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="fixed top-0 left-0 z-50 w-full"
+        >
+          {/* Backdrop */}
+          <div className="bg-white/80 backdrop-blur-md border-b border-zinc-200/60 shadow-sm">
+            <div className="mx-auto max-w-screen-2xl px-4 py-2 md:px-8">
+              {/* Current time display */}
+              <div className="mb-1.5 flex items-center justify-between">
+                <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-400">
+                  भदौ २३ · Bhadra 23
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-sm font-semibold text-zinc-800">
+                    {activeEvent.timeDisplay}
+                  </span>
+                  <span className="text-[10px] text-zinc-400">
+                    ({activeEvent.time})
+                  </span>
+                </div>
+              </div>
+
+              {/* Timeline bar */}
+              <div className="relative h-2 w-full rounded-full bg-zinc-100 overflow-hidden">
+                {/* Phase-colored segments */}
+                {phaseSegments.map((seg) => (
+                  <div
+                    key={seg.phase}
+                    className={`absolute top-0 h-full ${PHASE_BAR_COLORS[seg.phase]} opacity-20`}
+                    style={{
+                      left: `${seg.startPct * 100}%`,
+                      width: `${(seg.endPct - seg.startPct) * 100}%`,
+                    }}
+                  />
+                ))}
+
+                {/* Filled progress */}
+                <motion.div
+                  className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 via-amber-500 via-red-600 to-zinc-500"
+                  style={{ width: `${progressPct}%` }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                />
+              </div>
+
+              {/* Tick labels */}
+              <div className="relative mt-1 h-4">
+                {TICKS.map((tick) => {
+                  const pct =
+                    ((timeToMinutes(tick.time) - startMin) / totalSpan) * 100;
+                  return (
+                    <div
+                      key={tick.time}
+                      className="absolute -translate-x-1/2 flex flex-col items-center"
+                      style={{ left: `${pct}%` }}
+                    >
+                      <span className="text-[9px] font-mono text-zinc-400 hidden sm:block">
+                        {tick.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Moving indicator dot */}
+              <motion.div
+                className="absolute bottom-[18px] -translate-x-1/2"
+                style={{ left: `calc(${progressPct}% + 16px)` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              >
+                <div className="relative">
+                  <div
+                    className={`h-3.5 w-3.5 rounded-full border-2 border-white shadow-lg ${PHASE_DOT_COLORS[activeEvent.phase]}`}
+                  />
+                </div>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
