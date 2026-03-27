@@ -15,13 +15,28 @@ interface MapContainerProps {
   activeIndex: number;
 }
 
-// Phase-aware flyTo speeds — more urgent during crisis
+// Phase-aware base speeds — more urgent during crisis
 const PHASE_FLYTO: Record<Phase, { speed: number; curve: number }> = {
   gathering: { speed: 0.6, curve: 1.4 },
   escalation: { speed: 0.9, curve: 1.2 },
   curfew: { speed: 1.2, curve: 1.0 },
   aftermath: { speed: 0.7, curve: 1.3 },
 };
+
+// Haversine distance in meters between two [lng, lat] points
+function distanceMeters(a: [number, number], b: [number, number]): number {
+  const R = 6371000;
+  const dLat = ((b[1] - a[1]) * Math.PI) / 180;
+  const dLng = ((b[0] - a[0]) * Math.PI) / 180;
+  const sinDLat = Math.sin(dLat / 2);
+  const sinDLng = Math.sin(dLng / 2);
+  const h =
+    sinDLat * sinDLat +
+    Math.cos((a[1] * Math.PI) / 180) *
+      Math.cos((b[1] * Math.PI) / 180) *
+      sinDLng * sinDLng;
+  return R * 2 * Math.atan2(Math.sqrt(h), Math.sqrt(1 - h));
+}
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 function add3DBuildings(map: any, isDark: boolean) {
@@ -82,6 +97,7 @@ function addTerrain(map: any) {
 
 export default function MapContainer({ activeIndex }: MapContainerProps) {
   const mapRef = useRef<MapRef>(null);
+  const prevIndexRef = useRef(0);
 
   const activeEvent = useMemo(
     () => timelineEvents[activeIndex] ?? timelineEvents[0],
@@ -91,23 +107,45 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
   const isCurfew =
     activeEvent.phase === "curfew" || activeEvent.phase === "aftermath";
 
-  // Fly to active event with phase-aware speed
+  // Distance-aware flyTo: slow down for short moves to avoid dizziness
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
-    const flyConfig = PHASE_FLYTO[activeEvent.phase];
+    const prevEvent = timelineEvents[prevIndexRef.current] ?? timelineEvents[0];
+    prevIndexRef.current = activeIndex;
+
+    const dist = distanceMeters(prevEvent.coords, activeEvent.coords);
+    const baseConfig = PHASE_FLYTO[activeEvent.phase];
+
+    let speed = baseConfig.speed;
+    let curve = baseConfig.curve;
+
+    if (dist < 50) {
+      // Same location or tiny move — ease gently
+      speed = 0.3;
+      curve = 1.6;
+    } else if (dist < 300) {
+      // Short move (Bijuli→BICC area) — slow and smooth
+      speed = 0.4;
+      curve = 1.5;
+    } else if (dist < 600) {
+      // Medium move — moderate speed
+      speed = Math.min(speed, 0.6);
+      curve = 1.3;
+    }
+    // Long moves (>600m) use the phase default speed
 
     map.flyTo({
       center: activeEvent.coords,
       zoom: activeEvent.zoom,
       bearing: activeEvent.bearing,
       pitch: activeEvent.pitch,
-      speed: flyConfig.speed,
-      curve: flyConfig.curve,
+      speed,
+      curve,
       essential: true,
     });
-  }, [activeEvent]);
+  }, [activeEvent, activeIndex]);
 
   return (
     <div className="relative h-full w-full">
@@ -144,22 +182,22 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
       <CurfewOverlay active={isCurfew} />
 
       {/* Floating event info overlay */}
-      <div className="absolute bottom-4 left-4 z-30 max-w-xs">
-        <div className="rounded-lg bg-black/70 px-4 py-3 backdrop-blur-sm">
+      <div className="absolute bottom-2 left-2 z-30 max-w-[200px] md:bottom-4 md:left-4 md:max-w-xs">
+        <div className="rounded-lg bg-black/70 px-3 py-2 backdrop-blur-sm md:px-4 md:py-3">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-lg font-bold text-white">
+            <span className="font-mono text-sm font-bold text-white md:text-lg">
               {activeEvent.timeDisplay}
             </span>
-            <span className="text-xs text-white/50">
+            <span className="hidden text-xs text-white/50 md:inline">
               ({activeEvent.time})
             </span>
           </div>
           {activeEvent.locationEn && (
-            <p className="mt-1 text-xs font-medium text-[#2d8a78]">
+            <p className="mt-0.5 text-[10px] font-medium text-[#2d8a78] md:mt-1 md:text-xs">
               📍 {activeEvent.locationNp ?? activeEvent.locationEn}
             </p>
           )}
-          <p className="mt-1 text-[11px] leading-snug text-white/70 line-clamp-2">
+          <p className="mt-0.5 hidden text-[11px] leading-snug text-white/70 line-clamp-2 md:block md:mt-1">
             {activeEvent.descriptionEn}
           </p>
         </div>
