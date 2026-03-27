@@ -8,17 +8,24 @@ import { useActiveCard } from "@/hooks/useActiveCard";
 interface ScrollCardsProps {
   activeIndex: number;
   onActiveChange: (index: number) => void;
+  onScrollToCardReady?: (scrollTo: (index: number) => void) => void;
 }
 
 export default function ScrollCards({
   activeIndex,
   onActiveChange,
+  onScrollToCardReady,
 }: ScrollCardsProps) {
   const stableOnChange = useCallback(
     (idx: number) => onActiveChange(idx),
     [onActiveChange]
   );
-  const { setCardRef } = useActiveCard(timelineEvents.length, stableOnChange);
+  const { setCardRef, scrollToCard } = useActiveCard(timelineEvents.length, stableOnChange);
+
+  // Expose scrollToCard to parent (for timeline scrubber clicks)
+  if (onScrollToCardReady) {
+    onScrollToCardReady(scrollToCard);
+  }
 
   return (
     <div className="relative z-20 flex flex-col gap-6 py-[50vh] px-4 md:px-8 md:pl-6">
@@ -32,6 +39,7 @@ export default function ScrollCards({
           event={event}
           isActive={i === activeIndex}
           index={i}
+          onClick={() => scrollToCard(i)}
         />
       ))}
     </div>

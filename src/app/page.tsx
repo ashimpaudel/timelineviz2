@@ -21,9 +21,20 @@ export default function Home() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [scrubberVisible, setScrubberVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const scrollToCardRef = useRef<((index: number) => void) | null>(null);
 
   const handleActiveChange = useCallback((index: number) => {
     setActiveIndex(index);
+  }, []);
+
+  // Timeline scrubber click → scroll to card
+  const handleJumpToIndex = useCallback((index: number) => {
+    scrollToCardRef.current?.(index);
+  }, []);
+
+  // ScrollCards exposes its scrollToCard function
+  const handleScrollToCardReady = useCallback((fn: (index: number) => void) => {
+    scrollToCardRef.current = fn;
   }, []);
 
   const activePhase = useMemo(
@@ -46,7 +57,7 @@ export default function Home() {
 
   return (
     <main>
-      <TimelineScrubber activeIndex={activeIndex} visible={scrubberVisible} />
+      <TimelineScrubber activeIndex={activeIndex} visible={scrubberVisible} onJumpToIndex={handleJumpToIndex} />
       <HeroSection />
 
       {/* Scrollytelling section */}
@@ -62,6 +73,7 @@ export default function Home() {
             <ScrollCards
               activeIndex={activeIndex}
               onActiveChange={handleActiveChange}
+              onScrollToCardReady={handleScrollToCardReady}
             />
           </div>
         </div>

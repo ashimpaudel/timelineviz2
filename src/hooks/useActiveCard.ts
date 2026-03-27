@@ -16,6 +16,13 @@ export function useActiveCard(
     []
   );
 
+  // Programmatic scroll-to-card — IntersectionObserver will fire and sync the map
+  const scrollToCard = useCallback((index: number) => {
+    const el = cardRefs.current[index];
+    if (!el) return;
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, []);
+
   useEffect(() => {
     if (observerRef.current) {
       observerRef.current.disconnect();
@@ -58,5 +65,5 @@ export function useActiveCard(
     };
   }, [count, onChange]);
 
-  return { setCardRef };
+  return { setCardRef, scrollToCard };
 }

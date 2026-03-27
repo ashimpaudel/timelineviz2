@@ -18,10 +18,11 @@ interface TimelineCardProps {
   event: TimelineEvent;
   isActive: boolean;
   index: number;
+  onClick?: () => void;
 }
 
 const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
-  ({ event, isActive, index }, ref) => {
+  ({ event, isActive, index, onClick }, ref) => {
     const colors = PHASE_COLORS[event.phase];
     const phaseLabel = PHASE_LABELS[event.phase];
     const [imgError, setImgError] = useState(false);
@@ -36,8 +37,9 @@ const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-10%" }}
         transition={{ duration: 0.6, delay: 0.05, ease: "easeOut" }}
-        className="relative"
+        className="relative cursor-pointer group/card"
         data-index={index}
+        onClick={onClick}
       >
         {/* Active indicator dot on left */}
         <motion.div
@@ -60,7 +62,8 @@ const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
           }}
           transition={{ duration: 0.4, ease: "easeOut" }}
           className={`
-            overflow-hidden rounded-lg border-l-4 transition-shadow duration-500
+            overflow-hidden rounded-lg border-l-4 transition-all duration-500
+            group-hover/card:ring-2 group-hover/card:ring-black/5 group-hover/card:shadow-md
             ${colors.accent}
             ${isActive
               ? `${colors.bg} bg-white/90 backdrop-blur-md ${glow} ring-1 ring-black/5`

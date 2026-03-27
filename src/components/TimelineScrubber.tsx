@@ -8,6 +8,7 @@ import type { Phase } from "@/lib/constants";
 interface TimelineScrubberProps {
   activeIndex: number;
   visible: boolean;
+  onJumpToIndex?: (index: number) => void;
 }
 
 const PHASE_BAR_COLORS: Record<Phase, string> = {
@@ -69,6 +70,7 @@ const phaseSegments = buildPhaseSegments();
 export default function TimelineScrubber({
   activeIndex,
   visible,
+  onJumpToIndex,
 }: TimelineScrubberProps) {
   const activeEvent = timelineEvents[activeIndex] ?? timelineEvents[0];
 
@@ -76,6 +78,27 @@ export default function TimelineScrubber({
     const min = timeToMinutes(activeEvent.time);
     return ((min - startMin) / totalSpan) * 100;
   }, [activeEvent.time]);
+
+  // Click on timeline bar → find nearest event by time percentage
+  const handleBarClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!onJumpToIndex) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickPct = (e.clientX - rect.left) / rect.width;
+    const clickMin = startMin + clickPct * totalSpan;
+
+    // Find nearest event
+    let bestIdx = 0;
+    let bestDist = Infinity;
+    for (let i = 0; i < timelineEvents.length; i++) {
+      const evMin = timeToMinutes(timelineEvents[i].time);
+      const dist = Math.abs(evMin - clickMin);
+      if (dist < bestDist) {
+        bestDist = dist;
+        bestIdx = i;
+      }
+    }
+    onJumpToIndex(bestIdx);
+  };
 
   return (
     <AnimatePresence>
@@ -105,8 +128,8 @@ export default function TimelineScrubber({
                 </div>
               </div>
 
-              {/* Timeline bar with indicator */}
-              <div className="relative">
+              {/* Timeline bar with indicator — clickable */}
+              <div className="relative cursor-pointer" onClick={handleBarClick}>
                 <div className="relative h-2 w-full rounded-full bg-zinc-100 overflow-hidden">
                   {/* Phase-colored segments */}
                   {phaseSegments.map((seg) => (
@@ -138,25 +161,58 @@ export default function TimelineScrubber({
                     className={`h-4 w-4 rounded-full border-2 border-white shadow-lg ${PHASE_DOT_COLORS[activeEvent.phase]}`}
                   />
                 </motion.div>
+
+                {/* Clickable event dots — major events shown as small circles */}
+                {timelineEvents.map((ev, i) => {
+                  if (!ev.isMajor) return null;
+                  const evPct = ((timeToMinutes(ev.time) - startMin) / totalSpan) * 100;
+                  const isCurrentEvent = i === activeIndex;
+                  return (
+                    <button
+                      key={ev.id}
+                      className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 transition-all duration-200 hover:scale-150 ${
+                        isCurrentEvent ? "opacity-0" : ""
+                      }`}
+                      style={{ left: `${evPct}%` }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onJumpToIndex?.(i);
+                      }}
+                      title={`${ev.timeDisplay} — ${ev.descriptionEn?.slice(0, 50)}`}
+                    >
+                      <div className={`h-2 w-2 rounded-full ${PHASE_BAR_COLORS[ev.phase]} ring-1 ring-white cursor-pointer`} />
+                    </button>
+                  );
+                })}
               </div>
 
-              {/* Tick labels */}
+              {/* Tick labels — clickable */}
               <div className="relative mt-1 h-4">
                 {TICKS.map((tick, i) => {
                   const pct =
                     ((timeToMinutes(tick.time) - startMin) / totalSpan) * 100;
-                  // On mobile, only show first, curfew (12:30), and last ticks
                   const showOnMobile = i === 0 || tick.time === "12:30" || i === TICKS.length - 1;
+
+                  // Find nearest event to this tick time
+                  const tickMin = timeToMinutes(tick.time);
+                  let nearestIdx = 0;
+                  let nearestDist = Infinity;
+                  for (let j = 0; j < timelineEvents.length; j++) {
+                    const d = Math.abs(timeToMinutes(timelineEvents[j].time) - tickMin);
+                    if (d < nearestDist) { nearestDist = d; nearestIdx = j; }
+                  }
+
                   return (
-                    <div
+                    <button
                       key={tick.time}
-                      className={`absolute -translate-x-1/2 flex flex-col items-center ${showOnMobile ? "" : "hidden sm:flex"}`}
+                      className={`absolute -translate-x-1/2 flex flex-col items-center cursor-pointer hover:text-zinc-700 transition-colors ${showOnMobile ? "" : "hidden sm:flex"}`}
                       style={{ left: `${pct}%` }}
+                      onClick={() => onJumpToIndex?.(nearestIdx)}
                     >
-                      <span className="text-[9px] font-mono text-zinc-400">
+                      <span className="text-[9px] font-mono text-zinc-400 hover:text-zinc-700">
                         {tick.label}
                       </span>
-                    </div>
+                    </button>
                   );
                 })}
               </div>
