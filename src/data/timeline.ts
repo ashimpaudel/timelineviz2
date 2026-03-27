@@ -188,10 +188,10 @@ export const timelineEvents: TimelineEvent[] = [
     media: {
       type: "image",
       url: "/images/events/e08-barricade-break.jpg",
-      captionNp: "प्रहरी ब्यारिकेड तोड्दै भीड",
-      captionEn: "Crowd breaks through police barricade",
-      credit: "बाह्रखरी / Baahrakhari",
-      alt: "Large crowd pushing through police barricade",
+      captionNp: "संसद भवन गेट नजिक ठूलो भीड जम्मा",
+      captionEn: "Large crowd gathered near Parliament gate during escalation",
+      credit: "नेपाल खबर / Nepal Khabar",
+      alt: "Large crowd of protesters gathered at Parliament gate area",
     },
   },
   {
@@ -252,10 +252,10 @@ export const timelineEvents: TimelineEvent[] = [
     media: {
       type: "image",
       url: "/images/events/e11-water-cannon.jpg",
-      captionNp: "बानेश्वर चोकमा प्रदर्शनकारी र प्रहरी",
-      captionEn: "Protesters and police at Baneshwor Chowk during confrontation",
-      credit: "बाह्रखरी / Baahrakhari",
-      alt: "Confrontation between protesters and police at Baneshwor Chowk",
+      captionNp: "संसद भवनतर्फ अघि बढ्दै प्रदर्शनकारीहरू",
+      captionEn: "Protesters surging toward Parliament building",
+      credit: "नेपाल खबर / Nepal Khabar",
+      alt: "Large crowd of protesters advancing toward Parliament",
     },
   },
   {
@@ -291,10 +291,10 @@ export const timelineEvents: TimelineEvent[] = [
     media: {
       type: "image",
       url: "/images/events/e13-gate-climb.jpg",
-      captionNp: "संसद् भवन गेट क्षेत्रमा तनाव",
-      captionEn: "Tension at Parliament gate as protesters attempt to enter",
-      credit: "बाह्रखरी / Baahrakhari",
-      alt: "Tense confrontation at Parliament gate area",
+      captionNp: "प्रदर्शनकारीहरू संसद भवनको पर्खाल चढ्दै",
+      captionEn: "Protesters scaling the Parliament compound wall and green metal fence",
+      credit: "नेपाल खबर / Nepal Khabar",
+      alt: "Protesters climbing over the Parliament compound wall and green metal fence",
     },
   },
   {
@@ -330,10 +330,10 @@ export const timelineEvents: TimelineEvent[] = [
     media: {
       type: "image",
       url: "/images/events/e15-first-casualty.jpg",
-      captionNp: "बानेश्वर क्षेत्रमा तनावग्रस्त अवस्था",
-      captionEn: "Tense situation in Baneshwor area as casualties reported",
-      credit: "बाह्रखरी / Baahrakhari",
-      alt: "Tense situation near Baneshwor during police action",
+      captionNp: "संसद परिसरमा हतियार ताकेको सशस्त्र प्रहरी",
+      captionEn: "Armed police officer aiming weapon inside Parliament compound",
+      credit: "नेपाल खबर / Nepal Khabar",
+      alt: "Armed police officer in helmet aiming tear gas launcher inside Parliament grounds",
     },
   },
   {
@@ -537,6 +537,14 @@ export const timelineEvents: TimelineEvent[] = [
     isMajor: true,
     locationNp: "बिआइसिसी पर्खाल",
     locationEn: "BICC Compound Wall",
+    media: {
+      type: "image",
+      url: "/images/events/e26-bicc-breach.jpg",
+      captionNp: "बिआइसिसी पर्खाल भत्काउँदै प्रदर्शनकारी",
+      captionEn: "Protesters breaching the BICC compound wall and entering Parliament grounds",
+      credit: "नेपाल खबर / Nepal Khabar",
+      alt: "Protesters inside the BICC Parliament compound after breaching the wall",
+    },
   },
   {
     id: "e27",
