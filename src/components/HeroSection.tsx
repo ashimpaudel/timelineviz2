@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 
 export default function HeroSection() {
   return (
-    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-zinc-950 text-white">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-900 via-zinc-950 to-black" />
+    <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#0d2e27] text-white">
+      {/* Background gradient — Setopati green to dark */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#267163] via-[#1a4f44] to-[#0d2e27]" />
 
       {/* Subtle grid pattern */}
       <div
@@ -29,7 +29,7 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="mb-6 text-xs font-medium uppercase tracking-[0.3em] text-red-500"
+          className="mb-6 text-xs font-medium uppercase tracking-[0.3em] text-red-400"
         >
           जाँचबुझ आयोग प्रतिवेदन · Investigation Commission Report
         </motion.p>
@@ -74,10 +74,10 @@ export default function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.0, duration: 0.8 }}
-          className="mt-10 inline-flex items-center gap-3 rounded-full border border-zinc-800 px-5 py-2 text-sm text-zinc-500"
+          className="mt-10 inline-flex items-center gap-3 rounded-full border border-[#267163]/40 px-5 py-2 text-sm text-zinc-300"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
-          भदौ २३, २०८१ · September 8, 2024
+          भदौ २३, २०८२ · September 8, 2025
         </motion.div>
 
         {/* Scroll indicator */}

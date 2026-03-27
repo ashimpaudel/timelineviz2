@@ -11,14 +11,14 @@ interface TimelineScrubberProps {
 }
 
 const PHASE_BAR_COLORS: Record<Phase, string> = {
-  gathering: "bg-blue-500",
+  gathering: "bg-[#267163]",
   escalation: "bg-amber-500",
   curfew: "bg-red-600",
   aftermath: "bg-zinc-500",
 };
 
 const PHASE_DOT_COLORS: Record<Phase, string> = {
-  gathering: "bg-blue-500 shadow-blue-500/50",
+  gathering: "bg-[#267163] shadow-[#267163]/50",
   escalation: "bg-amber-500 shadow-amber-500/50",
   curfew: "bg-red-600 shadow-red-600/50",
   aftermath: "bg-zinc-500 shadow-zinc-500/50",
@@ -122,7 +122,7 @@ export default function TimelineScrubber({
 
                   {/* Filled progress */}
                   <motion.div
-                    className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 via-amber-500 via-red-600 to-zinc-500"
+                    className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-[#267163] via-amber-500 via-red-600 to-zinc-500"
                     style={{ width: `${progressPct}%` }}
                     transition={{ duration: 0.5, ease: "easeOut" }}
                   />

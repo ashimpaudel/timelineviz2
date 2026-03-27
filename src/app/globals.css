@@ -2,12 +2,23 @@
 
 :root {
   --background: #fafafa;
-  --foreground: #171717;
+  --foreground: #222222;
+  --setopati-green: #267163;
+  --setopati-green-dark: #1a4f44;
+  --setopati-green-light: #2d8a78;
+  --setopati-red: #DC2626;
+  --setopati-grey: #F3EFEF;
+  --setopati-grey-dark: #E5E7EB;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-setopati-green: #267163;
+  --color-setopati-green-dark: #1a4f44;
+  --color-setopati-green-light: #2d8a78;
+  --color-setopati-red: #DC2626;
+  --color-setopati-grey: #F3EFEF;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

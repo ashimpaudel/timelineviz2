@@ -4,6 +4,7 @@ import {
   Playfair_Display,
   Inter,
   JetBrains_Mono,
+  Mukta,
 } from "next/font/google";
 import "./globals.css";
 
@@ -34,6 +35,13 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
+const mukta = Mukta({
+  variable: "--font-mukta",
+  subsets: ["devanagari", "latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "भदौ २३ को समयरेखा — Timeline of Bhadra 23",
   description:
@@ -41,7 +49,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "भदौ २३ को समयरेखा — Timeline of Bhadra 23",
     description:
-      "A scrollytelling reconstruction of the events of Bhadra 23, 2081.",
+      "A scrollytelling reconstruction of the events of Bhadra 23, 2082.",
     type: "article",
   },
 };
@@ -59,6 +67,7 @@ export default function RootLayout({
         ${playfairDisplay.variable}
         ${inter.variable}
         ${jetbrainsMono.variable}
+        ${mukta.variable}
         h-full antialiased
       `}
     >

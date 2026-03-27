@@ -61,16 +61,16 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-zinc-950 px-6 py-16 text-center text-zinc-500">
-        <p className="font-serif text-lg text-zinc-300" lang="ne">
+      <footer className="bg-[#0d2e27] px-6 py-16 text-center text-[#267163]/60">
+        <p className="font-serif text-lg text-zinc-200" lang="ne">
           भदौ २३ र २४ गतेको घटनासम्बन्धी जाँचबुझ आयोगको प्रतिवेदनमा आधारित
         </p>
         <p className="mt-2 text-sm italic">
           Based on the Investigation Commission Report on the events of Bhadra
           23 and 24
         </p>
-        <div className="mt-8 h-px w-24 mx-auto bg-zinc-800" />
-        <p className="mt-6 text-xs text-zinc-600">
+        <div className="mt-8 h-px w-24 mx-auto bg-[#267163]/30" />
+        <p className="mt-6 text-xs text-[#267163]/40">
           यो परियोजना पत्रकारिता प्रयोजनका लागि बनाइएको हो।
           <br />
           This project was built for journalistic purposes.

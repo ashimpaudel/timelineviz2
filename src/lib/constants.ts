@@ -5,7 +5,7 @@ export const INITIAL_VIEW = {
   latitude: 27.6910,
   zoom: 14,
   bearing: 0,
-  pitch: 0,
+  pitch: 45,
 };
 
 export const CCTV_LOCATIONS = [
@@ -63,9 +63,9 @@ export type Phase = "gathering" | "escalation" | "curfew" | "aftermath";
 
 export const PHASE_COLORS: Record<Phase, { accent: string; bg: string; text: string }> = {
   gathering: {
-    accent: "border-blue-500",
-    bg: "bg-blue-500/10",
-    text: "text-blue-600",
+    accent: "border-[#267163]",
+    bg: "bg-[#267163]/10",
+    text: "text-[#267163]",
   },
   escalation: {
     accent: "border-amber-500",
