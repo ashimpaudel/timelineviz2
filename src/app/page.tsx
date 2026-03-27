@@ -45,8 +45,8 @@ export default function Home() {
       {/* Scrollytelling section */}
       <section ref={sectionRef} className="relative">
         <div className="flex flex-col md:flex-row">
-          {/* Map — sticky on desktop, sticky on mobile too (shorter height) */}
-          <div className="sticky top-0 z-10 h-[40vh] w-full md:h-screen md:w-[60%]">
+          {/* Map — sticky on desktop, sticky on mobile too */}
+          <div className="sticky top-0 z-10 h-[50vh] w-full md:h-screen md:w-[60%]">
             <MapContainer activeIndex={activeIndex} />
           </div>
 

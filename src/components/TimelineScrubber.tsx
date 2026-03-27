@@ -105,59 +105,61 @@ export default function TimelineScrubber({
                 </div>
               </div>
 
-              {/* Timeline bar */}
-              <div className="relative h-2 w-full rounded-full bg-zinc-100 overflow-hidden">
-                {/* Phase-colored segments */}
-                {phaseSegments.map((seg) => (
-                  <div
-                    key={seg.phase}
-                    className={`absolute top-0 h-full ${PHASE_BAR_COLORS[seg.phase]} opacity-20`}
-                    style={{
-                      left: `${seg.startPct * 100}%`,
-                      width: `${(seg.endPct - seg.startPct) * 100}%`,
-                    }}
-                  />
-                ))}
+              {/* Timeline bar with indicator */}
+              <div className="relative">
+                <div className="relative h-2 w-full rounded-full bg-zinc-100 overflow-hidden">
+                  {/* Phase-colored segments */}
+                  {phaseSegments.map((seg) => (
+                    <div
+                      key={seg.phase}
+                      className={`absolute top-0 h-full ${PHASE_BAR_COLORS[seg.phase]} opacity-30`}
+                      style={{
+                        left: `${seg.startPct * 100}%`,
+                        width: `${(seg.endPct - seg.startPct) * 100}%`,
+                      }}
+                    />
+                  ))}
 
-                {/* Filled progress */}
+                  {/* Filled progress */}
+                  <motion.div
+                    className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 via-amber-500 via-red-600 to-zinc-500"
+                    style={{ width: `${progressPct}%` }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                  />
+                </div>
+
+                {/* Moving indicator dot — positioned relative to the bar */}
                 <motion.div
-                  className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-blue-500 via-amber-500 via-red-600 to-zinc-500"
-                  style={{ width: `${progressPct}%` }}
+                  className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-10"
+                  animate={{ left: `${progressPct}%` }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
-                />
+                >
+                  <div
+                    className={`h-4 w-4 rounded-full border-2 border-white shadow-lg ${PHASE_DOT_COLORS[activeEvent.phase]}`}
+                  />
+                </motion.div>
               </div>
 
               {/* Tick labels */}
               <div className="relative mt-1 h-4">
-                {TICKS.map((tick) => {
+                {TICKS.map((tick, i) => {
                   const pct =
                     ((timeToMinutes(tick.time) - startMin) / totalSpan) * 100;
+                  // On mobile, only show first, curfew (12:30), and last ticks
+                  const showOnMobile = i === 0 || tick.time === "12:30" || i === TICKS.length - 1;
                   return (
                     <div
                       key={tick.time}
-                      className="absolute -translate-x-1/2 flex flex-col items-center"
+                      className={`absolute -translate-x-1/2 flex flex-col items-center ${showOnMobile ? "" : "hidden sm:flex"}`}
                       style={{ left: `${pct}%` }}
                     >
-                      <span className="text-[9px] font-mono text-zinc-400 hidden sm:block">
+                      <span className="text-[9px] font-mono text-zinc-400">
                         {tick.label}
                       </span>
                     </div>
                   );
                 })}
               </div>
-
-              {/* Moving indicator dot */}
-              <motion.div
-                className="absolute bottom-[18px] -translate-x-1/2"
-                style={{ left: `calc(${progressPct}% + 16px)` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              >
-                <div className="relative">
-                  <div
-                    className={`h-3.5 w-3.5 rounded-full border-2 border-white shadow-lg ${PHASE_DOT_COLORS[activeEvent.phase]}`}
-                  />
-                </div>
-              </motion.div>
             </div>
           </div>
         </motion.div>

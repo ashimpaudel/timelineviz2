@@ -1,5 +1,14 @@
 import type { Phase } from "@/lib/constants";
 
+export interface EventMedia {
+  type: "image" | "video" | "cctv";
+  url: string;
+  captionNp: string;
+  captionEn: string;
+  credit?: string;
+  alt: string;
+}
+
 export interface TimelineEvent {
   id: string;
   time: string; // 24h format for sorting "HH:MM"
@@ -12,6 +21,9 @@ export interface TimelineEvent {
   pitch: number;
   phase: Phase;
   isMajor?: boolean; // highlight key moments
+  media?: EventMedia;
+  locationNp?: string; // location name in Nepali
+  locationEn?: string; // location name in English
 }
 
 export const timelineEvents: TimelineEvent[] = [
@@ -100,9 +112,16 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 45,
     phase: "gathering",
     isMajor: true,
+    locationNp: "बिजुली बजार पुल",
+    locationEn: "Bijuli Bazaar Bridge",
+    media: {
+      type: "cctv",
+      url: "/images/e06-barricade.jpg",
+      captionNp: "बिजुली बजार पिटिजेड सिसिटिभीबाट",
+      captionEn: "Bijuli Bazaar PTZ CCTV — First group reaches the barricade",
+      alt: "CCTV footage of protesters reaching the barricade at Bijuli Bazaar bridge",
+    },
   },
-
-  // ── Phase 2: ESCALATION (11:00 – 12:29) ────────────────────────────
   {
     id: "e07",
     time: "11:40",
@@ -131,6 +150,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 45,
     phase: "escalation",
     isMajor: true,
+    locationNp: "नयाँ बानेश्वर",
+    locationEn: "New Baneshwor",
+    media: {
+      type: "cctv",
+      url: "/images/e08-barricade-break.jpg",
+      captionNp: "एभरेस्ट होटल पिटिजेड सिसिटिभीबाट",
+      captionEn: "Everest Hotel PTZ CCTV — Crowd breaks through barricade",
+      alt: "CCTV footage of large crowd breaking through police barricade",
+    },
   },
   {
     id: "e09",
@@ -146,6 +174,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 50,
     phase: "escalation",
     isMajor: true,
+    locationNp: "संसद भवन गेट",
+    locationEn: "Parliament Gate",
+    media: {
+      type: "cctv",
+      url: "/images/e09-parliament-gate.jpg",
+      captionNp: "सिभिल अस्पताल पिटिजेड सिसिटिभीबाट",
+      captionEn: "Civil Hospital PTZ CCTV — First group reaches Parliament gate",
+      alt: "CCTV footage of bike riders reaching the Parliament gate",
+    },
   },
   {
     id: "e10",
@@ -175,6 +212,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 45,
     phase: "escalation",
     isMajor: true,
+    locationNp: "बानेश्वर चोक",
+    locationEn: "Baneshwor Chowk",
+    media: {
+      type: "image",
+      url: "/images/e11-water-cannon.jpg",
+      captionNp: "बानेश्वर चोक सिसिटिभीबाट",
+      captionEn: "Police deploy water cannons as protesters retaliate with stones",
+      alt: "Police water cannon being deployed against protesters at Baneshwor Chowk",
+    },
   },
   {
     id: "e12",
@@ -204,6 +250,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 55,
     phase: "escalation",
     isMajor: true,
+    locationNp: "संसद भवन गेट",
+    locationEn: "Parliament Gate",
+    media: {
+      type: "cctv",
+      url: "/images/e13-gate-climb.jpg",
+      captionNp: "सिभिल अस्पताल सिसिटिभीबाट",
+      captionEn: "Protesters scale Parliament gate using broken roadside railings",
+      alt: "Protesters climbing over the Parliament gate",
+    },
   },
   {
     id: "e14",
@@ -233,6 +288,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 40,
     phase: "escalation",
     isMajor: true,
+    locationNp: "सिभिल अस्पताल",
+    locationEn: "Civil Hospital",
+    media: {
+      type: "cctv",
+      url: "/images/e15-first-casualty.jpg",
+      captionNp: "सिभिल अस्पताल इमर्जेन्सी सिसिटिभीबाट",
+      captionEn: "Civil Hospital emergency CCTV — First injured student arrives",
+      alt: "First casualty arriving at Civil Hospital emergency room",
+    },
   },
   {
     id: "e16",
@@ -276,6 +340,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 50,
     phase: "escalation",
     isMajor: true,
+    locationNp: "बिआइसिसी मेन गेट",
+    locationEn: "BICC Main Gate",
+    media: {
+      type: "cctv",
+      url: "/images/e18-gunshot-wound.jpg",
+      captionNp: "बिआइसिसी पिटिजेड सिसिटिभीबाट",
+      captionEn: "BICC CCTV — Person staggers from gate with gunshot wound",
+      alt: "Person clutching stomach after apparent gunshot wound near BICC gate",
+    },
   },
 
   // ── Phase 3: CURFEW (12:30 – 13:59) ────────────────────────────────
@@ -293,6 +366,8 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 35,
     phase: "curfew",
     isMajor: true,
+    locationNp: "काठमाडौं",
+    locationEn: "Kathmandu",
   },
   {
     id: "e20",
@@ -308,6 +383,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 50,
     phase: "curfew",
     isMajor: true,
+    locationNp: "बिआइसिसी गेट",
+    locationEn: "BICC Gate",
+    media: {
+      type: "image",
+      url: "/images/e20-fire-gunfire.jpg",
+      captionNp: "बिआइसिसी गेट नजिक आगजनी र गोली प्रहार",
+      captionEn: "Fire near BICC gate as gunfire is reported",
+      alt: "Fire burning near the BICC gate during protests",
+    },
   },
   {
     id: "e21",
@@ -380,6 +464,16 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 55,
     phase: "curfew",
     isMajor: true,
+    locationNp: "संसद भवन मेन गेट",
+    locationEn: "Parliament Main Gate",
+    media: {
+      type: "cctv",
+      url: "/images/e25-headshot.jpg",
+      captionNp: "जीसीएस ब्लग युट्युब भिडियोबाट",
+      captionEn: "GCS Blog YouTube — Security forces shoot protester at Main Gate",
+      credit: "GCS Blog YouTube",
+      alt: "Security forces firing at protesters at Parliament Main Gate",
+    },
   },
   {
     id: "e26",
@@ -395,6 +489,8 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 50,
     phase: "curfew",
     isMajor: true,
+    locationNp: "बिआइसिसी पर्खाल",
+    locationEn: "BICC Compound Wall",
   },
   {
     id: "e27",
@@ -410,6 +506,8 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 50,
     phase: "curfew",
     isMajor: true,
+    locationNp: "संसद पश्चिम गेट",
+    locationEn: "Parliament West Gate",
   },
   {
     id: "e28",
@@ -467,6 +565,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 50,
     phase: "curfew",
     isMajor: true,
+    locationNp: "संसद भवन अगाडि",
+    locationEn: "In front of Parliament",
+    media: {
+      type: "cctv",
+      url: "/images/e31-cpr.jpg",
+      captionNp: "लुम्बिनी तन्दुरी भोजनालय अगाडि सीपीआर दिइँदै",
+      captionEn: "CPR being administered in front of Lumbini Tandoori restaurant",
+      alt: "CPR being given to a casualty in front of restaurant opposite Parliament",
+    },
   },
   {
     id: "e32",
@@ -482,6 +589,8 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 40,
     phase: "curfew",
     isMajor: true,
+    locationNp: "सिभिल अस्पताल",
+    locationEn: "Civil Hospital",
   },
 
   // ── Phase 4: AFTERMATH (14:00 – 18:15) ─────────────────────────────
@@ -499,6 +608,16 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 45,
     phase: "aftermath",
     isMajor: true,
+    locationNp: "बानेश्वर चोक",
+    locationEn: "Baneshwor Chowk",
+    media: {
+      type: "image",
+      url: "/images/e33-headshot-student.jpg",
+      captionNp: "इओएन युट्युब च्यानलबाट",
+      captionEn: "EON YouTube — Student shot in the head at Baneshwor Chowk",
+      credit: "EON YouTube",
+      alt: "Documentation of student shot at Baneshwor Chowk",
+    },
   },
   {
     id: "e34",
@@ -570,6 +689,15 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 40,
     phase: "aftermath",
     isMajor: true,
+    locationNp: "संसद भवन मेन गेट",
+    locationEn: "Parliament Main Gate",
+    media: {
+      type: "image",
+      url: "/images/e38-army-arrival.jpg",
+      captionNp: "बिआइसिसी पिटिजेड सिसिटिभीबाट",
+      captionEn: "BICC CCTV — Nepal Army convoy arrives at Parliament Main Gate",
+      alt: "Nepal Army vehicles arriving at the Parliament Main Gate",
+    },
   },
   {
     id: "e39",
@@ -627,5 +755,7 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 20,
     phase: "aftermath",
     isMajor: true,
+    locationNp: "नयाँ बानेश्वर",
+    locationEn: "New Baneshwor",
   },
 ];
