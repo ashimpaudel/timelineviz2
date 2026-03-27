@@ -4,8 +4,8 @@ export const INITIAL_VIEW = {
   longitude: 85.3250,
   latitude: 27.6910,
   zoom: 14,
-  bearing: 0,
-  pitch: 45,
+  bearing: -20,
+  pitch: 60,
 };
 
 export const CCTV_LOCATIONS = [
