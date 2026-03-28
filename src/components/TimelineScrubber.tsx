@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { timelineEvents } from "@/data/timeline";
 import type { Phase } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface TimelineScrubberProps {
   activeIndex: number;
@@ -73,6 +74,8 @@ export default function TimelineScrubber({
   onJumpToIndex,
 }: TimelineScrubberProps) {
   const activeEvent = timelineEvents[activeIndex] ?? timelineEvents[0];
+  const { language } = useLanguage();
+  const isNp = language === "np";
 
   const progressPct = useMemo(() => {
     const min = timeToMinutes(activeEvent.time);
@@ -116,14 +119,11 @@ export default function TimelineScrubber({
               {/* Current time display */}
               <div className="mb-1.5 flex items-center justify-between">
                 <span className="text-[10px] font-medium uppercase tracking-widest text-zinc-400">
-                  भदौ २३ · Bhadra 23
+                  {isNp ? "भदौ २३" : "Bhadra 23"}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="font-mono text-sm font-semibold text-zinc-800">
-                    {activeEvent.timeDisplay}
-                  </span>
-                  <span className="text-[10px] text-zinc-400">
-                    ({activeEvent.time})
+                    {isNp ? activeEvent.timeDisplay : activeEvent.time}
                   </span>
                 </div>
               </div>
@@ -210,7 +210,7 @@ export default function TimelineScrubber({
                       onClick={() => onJumpToIndex?.(nearestIdx)}
                     >
                       <span className="text-[9px] font-mono text-zinc-400 hover:text-zinc-700">
-                        {tick.label}
+                        {isNp ? tick.label : tick.labelEn}
                       </span>
                     </button>
                   );

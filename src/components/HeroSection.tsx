@@ -1,8 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function HeroSection() {
+  const { language } = useLanguage();
+  const isNp = language === "np";
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#0d2e27] text-white">
       {/* Background gradient — Setopati green to dark */}
@@ -31,21 +35,18 @@ export default function HeroSection() {
           transition={{ delay: 0.3, duration: 0.8 }}
           className="mb-6 text-xs font-medium uppercase tracking-[0.3em] text-red-400"
         >
-          जाँचबुझ आयोग प्रतिवेदन · Investigation Commission Report
+          {isNp
+            ? "जाँचबुझ आयोग प्रतिवेदन"
+            : "Investigation Commission Report"}
         </motion.p>
 
-        {/* Headline Nepali */}
+        {/* Headline */}
         <h1
           className="font-serif text-4xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl"
-          lang="ne"
+          lang={isNp ? "ne" : "en"}
         >
-          भदौ २३ को समयरेखा
+          {isNp ? "भदौ २३ को समयरेखा" : "Timeline of Bhadra 23"}
         </h1>
-
-        {/* Headline English */}
-        <p className="mt-4 font-serif text-xl text-zinc-400 sm:text-2xl md:text-3xl">
-          Timeline of Bhadra 23
-        </p>
 
         {/* Description */}
         <motion.p
@@ -53,20 +54,11 @@ export default function HeroSection() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6, duration: 0.8 }}
           className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-zinc-400"
+          lang={isNp ? "ne" : "en"}
         >
-          जेनजी आन्दोलनका क्रममा भदौ २३ गते संसद भवनअगाडि प्रहरीको गोली लागि
-          १९ जनाभन्दा बढीको मृत्यु भएको थियो। यो समयरेखा त्यस दिनको
-          घटनाक्रमलाई मिनेटमिनेट विश्लेषण गर्दछ।
-        </motion.p>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8, duration: 0.8 }}
-          className="mx-auto mt-3 max-w-xl text-sm italic leading-relaxed text-zinc-500"
-        >
-          During the Gen Z protests on Bhadra 23, police gunfire near
-          Parliament killed more than 19 people. This timeline reconstructs the
-          day minute by minute.
+          {isNp
+            ? "जेनजी आन्दोलनका क्रममा भदौ २३ गते संसद भवनअगाडि प्रहरीको गोली लागि १९ जनाभन्दा बढीको मृत्यु भएको थियो। यो समयरेखा त्यस दिनको घटनाक्रमलाई मिनेटमिनेट विश्लेषण गर्दछ।"
+            : "During the Gen Z protests on Bhadra 23, police gunfire near Parliament killed more than 19 people. This timeline reconstructs the day minute by minute."}
         </motion.p>
 
         {/* Date stamp */}
@@ -77,7 +69,7 @@ export default function HeroSection() {
           className="mt-10 inline-flex items-center gap-3 rounded-full border border-[#267163]/40 px-5 py-2 text-sm text-zinc-300"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-pulse" />
-          भदौ २३, २०८२ · September 8, 2025
+          {isNp ? "भदौ २३, २०८२" : "September 8, 2025"}
         </motion.div>
 
         {/* Scroll indicator */}
@@ -88,7 +80,7 @@ export default function HeroSection() {
           className="mt-16 flex flex-col items-center gap-2 text-zinc-600"
         >
           <span className="text-xs uppercase tracking-widest">
-            Scroll to begin
+            {isNp ? "तल स्क्रोल गर्नुहोस्" : "Scroll to begin"}
           </span>
           <motion.svg
             animate={{ y: [0, 8, 0] }}

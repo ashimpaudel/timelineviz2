@@ -66,10 +66,10 @@ export const timelineEvents: TimelineEvent[] = [
     media: {
       type: "image",
       url: "/images/events/e02-gathering-maitighar.jpg",
-      captionNp: "माइतीघरमा #WAKEUPNEPAL प्लेकार्डसहित जेनजी प्रदर्शनकारी",
-      captionEn: "Gen Z protesters with #WAKEUPNEPAL placards at Maitighar Mandala",
-      credit: "बाह्रखरी / Baahrakhari",
-      alt: "Large crowd of young protesters holding WAKEUPNEPAL signs at Maitighar",
+      captionNp: "माइतीघर मण्डलमा जम्मा भएका जेनजी प्रदर्शनकारी",
+      captionEn: "Gen Z protesters gathered at Maitighar Mandala with placards",
+      credit: "OnlineKhabar",
+      alt: "Gen Z protesters assembled at Maitighar Mandala roundabout with anti-corruption placards",
     },
   },
   {

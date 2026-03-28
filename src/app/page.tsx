@@ -6,6 +6,8 @@ import HeroSection from "@/components/HeroSection";
 import ScrollCards from "@/components/ScrollCards";
 import TimelineScrubber from "@/components/TimelineScrubber";
 import AmbientSound from "@/components/AmbientSound";
+import LanguageToggle from "@/components/LanguageToggle";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { timelineEvents } from "@/data/timeline";
 
 const MapContainer = dynamic(() => import("@/components/MapContainer"), {
@@ -56,7 +58,13 @@ export default function Home() {
   }, []);
 
   return (
+    <LanguageProvider>
     <main>
+      {/* Language toggle — fixed top-right */}
+      <div className="fixed top-3 right-4 z-[60]">
+        <LanguageToggle />
+      </div>
+
       <TimelineScrubber activeIndex={activeIndex} visible={scrubberVisible} onJumpToIndex={handleJumpToIndex} />
       <HeroSection />
 
@@ -105,5 +113,6 @@ export default function Home() {
         </p>
       </footer>
     </main>
+    </LanguageProvider>
   );
 }

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import type { TimelineEvent } from "@/data/timeline";
 import { PHASE_COLORS, PHASE_LABELS } from "@/lib/constants";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Phase-specific glow colors for active cards
 const PHASE_GLOW: Record<string, string> = {
@@ -27,6 +28,8 @@ const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
     const phaseLabel = PHASE_LABELS[event.phase];
     const [imgError, setImgError] = useState(false);
     const glow = PHASE_GLOW[event.phase];
+    const { language } = useLanguage();
+    const isNp = language === "np";
 
     const hasMedia = event.media && !imgError;
 
@@ -98,7 +101,7 @@ const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
                 {/* Caption */}
                 <div className="absolute inset-x-0 bottom-0 px-3 pb-2">
                   <p className="text-[11px] leading-tight text-white/90">
-                    {event.media!.captionEn}
+                    {isNp ? event.media!.captionNp : event.media!.captionEn}
                   </p>
                   {event.media!.credit && (
                     <p className="mt-0.5 text-[9px] text-white/60">
@@ -149,7 +152,7 @@ const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
                   isActive ? colors.text : "text-zinc-300"
                 }`}
               >
-                {phaseLabel.np} · {phaseLabel.en}
+                {isNp ? phaseLabel.np : phaseLabel.en}
               </span>
               {event.isMajor && (
                 <span className="ml-auto h-2 w-2 rounded-full bg-red-500 animate-pulse" />
@@ -159,29 +162,19 @@ const TimelineCard = forwardRef<HTMLDivElement, TimelineCardProps>(
             {/* Location label */}
             {event.locationEn && (
               <p className={`mb-2 text-[11px] font-medium uppercase tracking-wider ${isActive ? "text-zinc-500" : "text-zinc-300"}`}>
-                📍 {event.locationNp} · {event.locationEn}
+                📍 {isNp ? event.locationNp : event.locationEn}
               </p>
             )}
 
-            {/* Nepali text (primary) */}
+            {/* Description — single language */}
             <p
               className={`
                 font-serif text-base leading-relaxed transition-colors duration-300
                 ${isActive ? "text-zinc-900" : "text-zinc-400"}
               `}
-              lang="ne"
+              lang={isNp ? "ne" : "en"}
             >
-              {event.descriptionNp}
-            </p>
-
-            {/* English subtitle */}
-            <p
-              className={`
-                mt-2 font-sans text-sm italic leading-relaxed transition-colors duration-300
-                ${isActive ? "text-zinc-600" : "text-zinc-300"}
-              `}
-            >
-              {event.descriptionEn}
+              {isNp ? event.descriptionNp : event.descriptionEn}
             </p>
           </div>
         </motion.div>
