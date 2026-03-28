@@ -41,6 +41,14 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -8,
     pitch: 55,
     phase: "gathering",
+    media: {
+      type: "image",
+      url: "/images/events/e01-early-gathering.jpg",
+      captionNp: "प्रदर्शनमा भेला भएका विद्यार्थीहरू",
+      captionEn: "Students assembling for the protest in school uniforms",
+      credit: "छानबिन आयोग प्रतिवेदन / Investigation Commission Report",
+      alt: "Students in school uniforms gathering early morning for the Bhadra 23 protest",
+    },
   },
   {
     id: "e02",
@@ -77,6 +85,14 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 8,
     pitch: 60,
     phase: "gathering",
+    media: {
+      type: "image",
+      url: "/images/events/e03-students-joining.jpg",
+      captionNp: "#WAKEUPNEPAL प्लेकार्डसहित विद्यार्थीहरू",
+      captionEn: "Students with #WAKEUPNEPAL placards joining the protest",
+      credit: "छानबिन आयोग प्रतिवेदन / Investigation Commission Report",
+      alt: "Young protesters holding WAKEUPNEPAL placards at the gathering",
+    },
   },
   {
     id: "e04",
@@ -380,13 +396,6 @@ export const timelineEvents: TimelineEvent[] = [
     isMajor: true,
     locationNp: "बिआइसिसी मेन गेट",
     locationEn: "BICC Main Gate",
-    media: {
-      type: "cctv",
-      url: "/images/e18-gunshot-wound.jpg",
-      captionNp: "बिआइसिसी पिटिजेड सिसिटिभीबाट",
-      captionEn: "BICC CCTV — Person staggers from gate with gunshot wound",
-      alt: "Person clutching stomach after apparent gunshot wound near BICC gate",
-    },
   },
 
   // ── Phase 3: CURFEW (12:30 – 13:59) ────────────────────────────────
@@ -431,13 +440,6 @@ export const timelineEvents: TimelineEvent[] = [
     isMajor: true,
     locationNp: "बिआइसिसी गेट",
     locationEn: "BICC Gate",
-    media: {
-      type: "image",
-      url: "/images/e20-fire-gunfire.jpg",
-      captionNp: "बिआइसिसी गेट नजिक आगजनी र गोली प्रहार",
-      captionEn: "Fire near BICC gate as gunfire is reported",
-      alt: "Fire burning near the BICC gate during protests",
-    },
   },
   {
     id: "e21",
@@ -512,14 +514,6 @@ export const timelineEvents: TimelineEvent[] = [
     isMajor: true,
     locationNp: "संसद भवन मेन गेट",
     locationEn: "Parliament Main Gate",
-    media: {
-      type: "cctv",
-      url: "/images/e25-headshot.jpg",
-      captionNp: "जीसीएस ब्लग युट्युब भिडियोबाट",
-      captionEn: "GCS Blog YouTube — Security forces shoot protester at Main Gate",
-      credit: "GCS Blog YouTube",
-      alt: "Security forces firing at protesters at Parliament Main Gate",
-    },
   },
   {
     id: "e26",
@@ -621,13 +615,6 @@ export const timelineEvents: TimelineEvent[] = [
     isMajor: true,
     locationNp: "संसद भवन अगाडि",
     locationEn: "In front of Parliament",
-    media: {
-      type: "cctv",
-      url: "/images/e31-cpr.jpg",
-      captionNp: "लुम्बिनी तन्दुरी भोजनालय अगाडि सीपीआर दिइँदै",
-      captionEn: "CPR being administered in front of Lumbini Tandoori restaurant",
-      alt: "CPR being given to a casualty in front of restaurant opposite Parliament",
-    },
   },
   {
     id: "e32",
@@ -668,8 +655,8 @@ export const timelineEvents: TimelineEvent[] = [
       type: "image",
       url: "/images/events/e33-baneshwor-aftermath.jpg",
       captionNp: "बानेश्वर क्षेत्रमा तनावग्रस्त अवस्था",
-      captionEn: "Aftermath tension in Baneshwor area",
-      credit: "रातोपाटी / Nepal Photo Library",
+      captionEn: "Destruction and aftermath at Baneshwor Chowk",
+      credit: "छानबिन आयोग प्रतिवेदन / Investigation Commission Report",
       alt: "Aftermath scene in the tense Baneshwor area",
     },
   },
@@ -686,6 +673,14 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -4,
     pitch: 75,
     phase: "aftermath",
+    media: {
+      type: "image",
+      url: "/images/events/e34-ambulance-fire.jpg",
+      captionNp: "प्रदर्शनकारीहरूले एम्बुलेन्समा आगो लगाएपछिको दृश्य",
+      captionEn: "Burnt vehicle aftermath near Parliament",
+      credit: "छानबिन आयोग प्रतिवेदन / Investigation Commission Report",
+      alt: "Burnt ambulance and vehicle destruction near the Parliament area",
+    },
   },
   {
     id: "e35",
@@ -745,13 +740,6 @@ export const timelineEvents: TimelineEvent[] = [
     isMajor: true,
     locationNp: "संसद भवन मेन गेट",
     locationEn: "Parliament Main Gate",
-    media: {
-      type: "image",
-      url: "/images/e38-army-arrival.jpg",
-      captionNp: "बिआइसिसी पिटिजेड सिसिटिभीबाट",
-      captionEn: "BICC CCTV — Nepal Army convoy arrives at Parliament Main Gate",
-      alt: "Nepal Army vehicles arriving at the Parliament Main Gate",
-    },
   },
   {
     id: "e39",
