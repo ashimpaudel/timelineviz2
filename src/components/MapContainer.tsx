@@ -291,8 +291,8 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
     // Use the reusable camera controller
     animateCameraToIndex(rawMap, activeIndex, prevIndex);
 
-    // Update light preset for phase-aware atmosphere
-    setLightPreset(rawMap, activeEvent.phase);
+    // Update light preset based on event timestamp
+    setLightPreset(rawMap, activeEvent.phase, activeEvent.time);
 
     // Update route line progress
     if (rawMap.getSource("route-progress")) {
@@ -320,7 +320,7 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
           addTerrain(map);
           addRouteLayers(map, progressCoords, lineColor);
           addHighlightLayers(map, activeEvent.coords, highlightColor);
-          setLightPreset(map, activeEvent.phase);
+          setLightPreset(map, activeEvent.phase, activeEvent.time);
           startPulse(map);
         }}
         onStyleData={() => {

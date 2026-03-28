@@ -13,13 +13,30 @@ const PHASE_FLYTO: Record<Phase, { speed: number; curve: number }> = {
   aftermath: { speed: 0.7, curve: 1.3 },
 };
 
-// Phase → Mapbox Standard light preset
+// Phase → Mapbox Standard light preset (fallback)
 export const PHASE_LIGHT_PRESET: Record<Phase, string> = {
   gathering: "day",
   escalation: "day",
   curfew: "dusk",
   aftermath: "night",
 };
+
+/**
+ * Determine light preset from event timestamp for realistic time-of-day lighting.
+ * - 08:00–12:29  → "day"     (bright morning/midday)
+ * - 12:30–14:59  → "dusk"    (curfew begins — ominous dimming)
+ * - 15:00–16:59  → "dusk"    (late afternoon)
+ * - 17:00+       → "night"   (evening darkness)
+ */
+function getTimeBasedLightPreset(time: string, phase: Phase): string {
+  const [h, m] = time.split(":").map(Number);
+  const minutes = h * 60 + m;
+
+  if (minutes < 750) return "day";       // before 12:30
+  if (phase === "curfew") return "dusk";  // 12:30–13:59 curfew = ominous
+  if (minutes < 1020) return "dusk";      // 15:00–16:59
+  return "night";                          // 17:00+
+}
 
 // Haversine distance in meters between two [lng, lat] points
 function distanceMeters(a: [number, number], b: [number, number]): number {
@@ -108,10 +125,13 @@ export function animateCameraToIndex(
 }
 
 /**
- * Apply the phase-appropriate light preset to a Mapbox Standard style map.
+ * Apply the time-aware light preset to a Mapbox Standard style map.
+ * Uses event timestamp for realistic day→dusk→night progression.
  */
-export function setLightPreset(map: any, phase: Phase): void {
-  const preset = PHASE_LIGHT_PRESET[phase];
+export function setLightPreset(map: any, phase: Phase, time?: string): void {
+  const preset = time
+    ? getTimeBasedLightPreset(time, phase)
+    : PHASE_LIGHT_PRESET[phase];
   try {
     map.setConfigProperty("basemap", "lightPreset", preset);
   } catch {
