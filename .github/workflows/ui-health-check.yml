@@ -1,0 +1,114 @@
+name: UI Health Check (Hourly)
+
+on:
+  schedule:
+    - cron: '0 * * * *'   # every hour
+  workflow_dispatch:        # allow manual trigger
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  ui-audit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: scripts/ui-audit
+        run: npm install
+
+      - name: Install Playwright browsers
+        working-directory: scripts/ui-audit
+        run: npx playwright install --with-deps chromium
+
+      - name: Run UI audit
+        working-directory: scripts/ui-audit
+        run: node audit.js
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          TARGET_URL: https://bhadra23.vercel.app
+
+      - name: Create GitHub Issue with report
+        uses: actions/github-script@v7
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const reportPath = path.join(process.env.GITHUB_WORKSPACE, 'scripts/ui-audit/report.json');
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+
+            const date = new Date(report.timestamp).toUTCString();
+            const score = report.ui_score !== null && report.ui_score !== undefined ? report.ui_score : 'N/A';
+
+            // Build bugs table
+            let bugsSection = '_No bugs reported._';
+            if (report.bugs && report.bugs.length > 0) {
+              const rows = report.bugs.map(b =>
+                `| ${b.severity} | ${b.location} | ${b.description} | ${b.suggestion} |`
+              ).join('\n');
+              bugsSection = `| Severity | Location | Description | Suggestion |\n|----------|----------|-------------|------------|\n${rows}`;
+            }
+
+            const errorNote = report.error ? `\n> ⚠️ **Error:** ${report.error}\n` : '';
+
+            const body = `## 🎯 UI Score: ${score}/100
+
+> ${report.score_rationale || '_No rationale provided._'}
+${errorNote}
+**🕐 Checked at:** ${date}  
+**🔗 URL:** https://bhadra23.vercel.app  
+**✅ Steps completed:** ${report.steps_completed} | **❌ Steps failed:** ${report.steps_failed}
+
+---
+
+## 📝 Summary
+${report.summary || '_No summary available._'}
+
+---
+
+## 🐛 Bugs & UX Issues
+
+${bugsSection}
+
+---
+*Generated automatically by the [UI Health Check workflow](../../actions/workflows/ui-health-check.yml)*`;
+
+            // Ensure the label exists
+            const labelName = 'ui-audit';
+            try {
+              await github.rest.issues.getLabel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                name: labelName,
+              });
+            } catch (e) {
+              if (e.status === 404) {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: labelName,
+                  color: '0075ca',
+                  description: 'Automated UI health audit report',
+                });
+              }
+            }
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🤖 UI Health Report — Score: ${score}/100 — ${date}`,
+              body,
+              labels: [labelName],
+            });

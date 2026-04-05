@@ -16,6 +16,10 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Mapbox token
+
+Set `NEXT_PUBLIC_MAPBOX_TOKEN` (or `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`) in your environment so the 3D map uses your own credentials. If none is provided, the app falls back to Mapbox's public demo token and a basic style for previews.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

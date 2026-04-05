@@ -1,4 +1,16 @@
-export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
+const MAPBOX_FALLBACK_TOKEN =
+  "pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBmbHBiczQ5Y3gifQ.GC4JAgA3X3ENcy9XUG6uH";
+
+// Prefer explicit project tokens, but fall back to Mapbox's public demo key so the map
+// keeps rendering in previews where env vars are missing.
+export const MAPBOX_TOKEN =
+  (process.env.NEXT_PUBLIC_MAPBOX_TOKEN ||
+    process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
+    "").trim() || MAPBOX_FALLBACK_TOKEN;
+
+export const USING_FALLBACK_MAPBOX_TOKEN = !(
+  process.env.NEXT_PUBLIC_MAPBOX_TOKEN || process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+);
 
 export const INITIAL_VIEW = {
   longitude: 85.3250,
