@@ -140,16 +140,19 @@ export function setLightPreset(map: any, phase: Phase, time?: string): void {
 }
 
 /**
- * Add terrain to the map.
+ * Add terrain to the map using free Mapzen/AWS terrain tiles (no API key required).
  */
 export function addTerrain(map: any): void {
-  if (map.getSource("mapbox-dem")) return;
+  if (map.getSource("terrain-dem")) return;
 
-  map.addSource("mapbox-dem", {
+  map.addSource("terrain-dem", {
     type: "raster-dem",
-    url: "mapbox://mapbox.mapbox-terrain-dem-v1",
-    tileSize: 512,
+    tiles: [
+      "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png",
+    ],
+    encoding: "terrarium",
+    tileSize: 256,
     maxzoom: 14,
   });
-  map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+  map.setTerrain({ source: "terrain-dem", exaggeration: 1.5 });
 }

@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useEffect, useMemo, useState, useCallback } from "react";
-import Map, { NavigationControl, type MapRef } from "react-map-gl/mapbox";
-import "mapbox-gl/dist/mapbox-gl.css";
+import Map, { NavigationControl, type MapRef } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
+import maplibregl from "maplibre-gl";
+import { Protocol } from "pmtiles";
 
 import { timelineEvents } from "@/data/timeline";
 import {
-  MAPBOX_TOKEN,
   INITIAL_VIEW,
   PROTEST_ROUTE,
   getRouteProgressIndex,
@@ -20,13 +21,17 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import CctvMarkers from "./CctvMarker";
 import CurfewOverlay from "./CurfewOverlay";
 
+// Register the pmtiles:// protocol with MapLibre GL once at module load time
+const pmtilesProtocol = new Protocol();
+maplibregl.addProtocol("pmtiles", pmtilesProtocol.tile);
+
 interface MapContainerProps {
   activeIndex: number;
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-// Phase-specific highlight colors (hex for Mapbox)
+// Phase-specific highlight colors
 const PHASE_HIGHLIGHT_COLORS: Record<Phase, string> = {
   gathering: "#267163",
   escalation: "#f59e0b",
@@ -309,7 +314,6 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
     <div className="relative h-full w-full">
       <Map
         ref={mapRef}
-        mapboxAccessToken={MAPBOX_TOKEN}
         initialViewState={INITIAL_VIEW}
         mapStyle={MAP_STYLE_STANDARD}
         style={{ width: "100%", height: "100%" }}
@@ -327,7 +331,7 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
           const map = mapRef.current?.getMap();
           if (!map) return;
           setTimeout(() => {
-            if (!map.getSource("mapbox-dem")) addTerrain(map);
+            if (!map.getSource("terrain-dem")) addTerrain(map);
             addRouteLayers(map, progressCoords, lineColor);
             if (!map.getSource("highlight-point")) {
               addHighlightLayers(map, activeEvent.coords, highlightColor);
