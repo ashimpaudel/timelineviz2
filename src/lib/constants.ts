@@ -1,4 +1,4 @@
-export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN!;
+// MAPBOX_TOKEN removed — no longer needed after migrating to MapLibre + OpenFreeMap
 
 export const INITIAL_VIEW = {
   longitude: 85.3250,
