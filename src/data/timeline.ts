@@ -41,6 +41,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -8,
     pitch: 55,
     phase: "gathering",
+    locationNp: "माइतीघर मण्डल",
+    locationEn: "Maitighar Mandala",
     media: {
       type: "image",
       url: "/images/events/e01-early-gathering.jpg",
@@ -63,6 +65,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 0,
     pitch: 60,
     phase: "gathering",
+    locationNp: "माइतीघर मण्डल",
+    locationEn: "Maitighar Mandala",
     media: {
       type: "image",
       url: "/images/events/e02-gathering-maitighar.jpg",
@@ -85,6 +89,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 8,
     pitch: 60,
     phase: "gathering",
+    locationNp: "माइतीघर मण्डल",
+    locationEn: "Maitighar Mandala",
     media: {
       type: "image",
       url: "/images/events/e03-students-joining.jpg",
@@ -107,6 +113,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -4,
     pitch: 62,
     phase: "gathering",
+    locationNp: "माइतीघर मण्डल",
+    locationEn: "Maitighar Mandala",
     media: {
       type: "image",
       url: "/images/events/e04-crowd-grows.jpg",
@@ -129,6 +137,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 14,
     pitch: 68,
     phase: "gathering",
+    locationNp: "बिजुली बजार",
+    locationEn: "Bijuli Bazaar",
     media: {
       type: "image",
       url: "/images/events/e05-bijuli-bazaar.jpg",
@@ -176,6 +186,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -30,
     pitch: 72,
     phase: "escalation",
+    locationNp: "एभरेस्ट होटल",
+    locationEn: "Everest Hotel",
     media: {
       type: "image",
       url: "/images/events/e07-everest-hotel.jpg",
@@ -248,6 +260,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -11,
     pitch: 73,
     phase: "escalation",
+    locationNp: "बिआइसिसी गेट",
+    locationEn: "BICC Gate",
   },
   {
     id: "e11",
@@ -287,6 +301,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -20,
     pitch: 75,
     phase: "escalation",
+    locationNp: "संसद भवन मेन गेट",
+    locationEn: "Parliament Main Gate",
   },
   {
     id: "e13",
@@ -326,6 +342,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -4,
     pitch: 75,
     phase: "escalation",
+    locationNp: "बिआइसिसी मेन गेट",
+    locationEn: "BICC Main Gate",
   },
   {
     id: "e15",
@@ -365,6 +383,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -53,
     pitch: 72,
     phase: "escalation",
+    locationNp: "संसद पश्चिम गेट",
+    locationEn: "Parliament West Gate",
   },
   {
     id: "e17",
@@ -379,6 +399,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 20,
     pitch: 70,
     phase: "escalation",
+    locationNp: "सिभिल अस्पताल",
+    locationEn: "Civil Hospital",
   },
   {
     id: "e18",
@@ -421,8 +443,8 @@ export const timelineEvents: TimelineEvent[] = [
       alt: "Scene from Baneshwor area after curfew order was issued",
     },
     isMajor: true,
-    locationNp: "काठमाडौं",
-    locationEn: "Kathmandu",
+    locationNp: "नयाँ बानेश्वर",
+    locationEn: "New Baneshwor",
   },
   {
     id: "e20",
@@ -454,6 +476,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -28,
     pitch: 75,
     phase: "curfew",
+    locationNp: "बिआइसिसी मेन गेट",
+    locationEn: "BICC Main Gate",
   },
   {
     id: "e22",
@@ -468,6 +492,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -45,
     pitch: 72,
     phase: "curfew",
+    locationNp: "संसद पश्चिम गेट",
+    locationEn: "Parliament West Gate",
   },
   {
     id: "e23",
@@ -483,6 +509,8 @@ export const timelineEvents: TimelineEvent[] = [
     pitch: 74,
     phase: "curfew",
     isMajor: true,
+    locationNp: "बिआइसिसी गेट अगाडि",
+    locationEn: "BICC Gate",
   },
   {
     id: "e24",
@@ -497,6 +525,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 16,
     pitch: 55,
     phase: "curfew",
+    locationNp: "नयाँ बानेश्वर",
+    locationEn: "New Baneshwor",
   },
   {
     id: "e25",
@@ -570,6 +600,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 23,
     pitch: 70,
     phase: "curfew",
+    locationNp: "अरेबिका कफी शप",
+    locationEn: "Arabica Coffee Shop",
   },
   {
     id: "e29",
@@ -584,6 +616,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 36,
     pitch: 70,
     phase: "curfew",
+    locationNp: "सिभिल अस्पताल",
+    locationEn: "Civil Hospital",
   },
   {
     id: "e30",
@@ -598,6 +632,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -36,
     pitch: 75,
     phase: "curfew",
+    locationNp: "संसद भवन मेन गेट",
+    locationEn: "Parliament Main Gate",
   },
   {
     id: "e31",
@@ -673,6 +709,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -4,
     pitch: 75,
     phase: "aftermath",
+    locationNp: "संसद भवन मेन गेट",
+    locationEn: "Parliament Main Gate",
     media: {
       type: "image",
       url: "/images/events/e34-ambulance-fire.jpg",
@@ -695,6 +733,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -31,
     pitch: 68,
     phase: "aftermath",
+    locationNp: "नयाँ बानेश्वर चोक",
+    locationEn: "New Baneshwor Chowk",
   },
   {
     id: "e36",
@@ -709,6 +749,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -28,
     pitch: 75,
     phase: "aftermath",
+    locationNp: "संसद भवन मेन गेट",
+    locationEn: "Parliament Main Gate",
   },
   {
     id: "e37",
@@ -723,6 +765,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -10,
     pitch: 74,
     phase: "aftermath",
+    locationNp: "बिआइसिसी गेट अगाडि",
+    locationEn: "BICC Gate",
   },
   {
     id: "e38",
@@ -754,6 +798,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 16,
     pitch: 70,
     phase: "aftermath",
+    locationNp: "नयाँ बानेश्वर",
+    locationEn: "New Baneshwor",
   },
   {
     id: "e40",
@@ -768,6 +814,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: -46,
     pitch: 72,
     phase: "aftermath",
+    locationNp: "एभरेस्ट होटल",
+    locationEn: "Everest Hotel",
   },
   {
     id: "e41",
@@ -782,6 +830,8 @@ export const timelineEvents: TimelineEvent[] = [
     bearing: 12,
     pitch: 70,
     phase: "aftermath",
+    locationNp: "सिभिल अस्पताल",
+    locationEn: "Civil Hospital",
   },
   {
     id: "e42",
