@@ -65,11 +65,11 @@ export const timelineEvents: TimelineEvent[] = [
     phase: "gathering",
     media: {
       type: "image",
-      url: "/images/events/e02-gathering-maitighar.jpg",
+      url: "/images/uploads/maitighar-gathering-genz.jpg",
       captionNp: "माइतीघर मण्डलमा जम्मा भएका जेनजी प्रदर्शनकारी",
-      captionEn: "Gen Z protesters gathered at Maitighar Mandala with placards",
-      credit: "OnlineKhabar",
-      alt: "Gen Z protesters assembled at Maitighar Mandala roundabout with anti-corruption placards",
+      captionEn: "Gen Z protesters at Maitighar Mandala holding 'Stop Corruption' signs and the national flag.",
+      credit: "The Kathmandu Post / User Upload",
+      alt: "Gen Z protesters assembled at Maitighar Mandala with national flags and placards",
     },
   },
   {

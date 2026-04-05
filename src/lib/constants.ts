@@ -91,6 +91,14 @@ export const PHASE_LABELS: Record<Phase, { en: string; np: string }> = {
   aftermath: { en: "Aftermath", np: "परिणाम" },
 };
 
+// Section background colors that shift as the user scrolls through phases
+export const PHASE_SECTION_BG: Record<Phase, string> = {
+  gathering: "#f0faf8",  // calm mint-tinted white
+  escalation: "#fffbeb", // warm amber-tinted white
+  curfew: "#1c0505",     // deep dark red
+  aftermath: "#f4f4f5",  // neutral zinc-100
+};
+
 export const FLYTO_DEFAULTS = {
   speed: 0.8,
   curve: 1.4,

@@ -9,6 +9,7 @@ import AmbientSound from "@/components/AmbientSound";
 import LanguageToggle from "@/components/LanguageToggle";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { timelineEvents } from "@/data/timeline";
+import { PHASE_SECTION_BG } from "@/lib/constants";
 
 const MapContainer = dynamic(() => import("@/components/MapContainer"), {
   ssr: false,
@@ -69,7 +70,14 @@ export default function Home() {
       <HeroSection />
 
       {/* Scrollytelling section */}
-      <section ref={sectionRef} className="relative">
+      <section
+        ref={sectionRef}
+        className="relative"
+        style={{
+          backgroundColor: PHASE_SECTION_BG[activePhase],
+          transition: "background-color 1.5s ease",
+        }}
+      >
         <div className="flex flex-col md:flex-row">
           {/* Map — sticky on desktop, fixed 40vh on mobile */}
           <div className="sticky top-0 z-10 h-[40vh] w-full md:h-screen md:w-[60%]">
