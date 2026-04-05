@@ -141,15 +141,10 @@ export function setLightPreset(map: any, phase: Phase, time?: string): void {
 
 /**
  * Add terrain to the map.
+ * NOTE: Terrain is disabled — the Mapbox DEM source requires a paid Mapbox token.
+ * A free replacement (e.g. Maptiler terrain) can be added here in the future.
  */
-export function addTerrain(map: any): void {
-  if (map.getSource("mapbox-dem")) return;
-
-  map.addSource("mapbox-dem", {
-    type: "raster-dem",
-    url: "mapbox://mapbox.mapbox-terrain-dem-v1",
-    tileSize: 512,
-    maxzoom: 14,
-  });
-  map.setTerrain({ source: "mapbox-dem", exaggeration: 1.5 });
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function addTerrain(_map: any): void {
+  // no-op: terrain requires a paid source
 }
