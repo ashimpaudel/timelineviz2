@@ -2,6 +2,18 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### Download Map Tiles
+
+Before running the app, you need to download the local map tiles:
+
+```bash
+bash scripts/download-tiles.sh
+```
+
+This will download `kathmandu.pmtiles` (~5–15 MB) to the `public/` directory. The map uses these local tiles instead of fetching from external APIs.
+
+### Run the Development Server
+
 First, run the development server:
 
 ```bash

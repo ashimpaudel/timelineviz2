@@ -43,3 +43,6 @@ next-env.d.ts
 .vercel
 .env*.local
 public/images/extracted/
+
+# local map tiles (download with scripts/download-tiles.sh)
+public/*.pmtiles

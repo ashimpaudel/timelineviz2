@@ -32,12 +32,12 @@ body {
   color: var(--foreground);
 }
 
-/* Mapbox overrides */
-.mapboxgl-ctrl-logo {
+/* MapLibre overrides */
+.maplibregl-ctrl-logo {
   display: none !important;
 }
 
-.mapboxgl-ctrl-attrib {
+.maplibregl-ctrl-attrib {
   display: none !important;
 }
 
