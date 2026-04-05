@@ -1,6 +1,6 @@
 "use client";
 
-import { Marker } from "react-map-gl/mapbox";
+import { Marker } from "react-map-gl/maplibre";
 import { motion, AnimatePresence } from "framer-motion";
 import { CCTV_LOCATIONS, CCTV_REVEAL_AT } from "@/lib/constants";
 
