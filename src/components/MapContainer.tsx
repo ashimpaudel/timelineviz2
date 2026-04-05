@@ -1,12 +1,11 @@
 "use client";
 
-import { useRef, useEffect, useMemo, useState, useCallback } from "react";
-import Map, { NavigationControl, type MapRef } from "react-map-gl/mapbox";
-import "mapbox-gl/dist/mapbox-gl.css";
+import { useRef, useEffect, useMemo, useCallback } from "react";
+import Map, { NavigationControl, type MapRef } from "react-map-gl/maplibre";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 import { timelineEvents } from "@/data/timeline";
 import {
-  MAPBOX_TOKEN,
   INITIAL_VIEW,
   PROTEST_ROUTE,
   getRouteProgressIndex,
@@ -220,10 +219,98 @@ function updateRouteProgress(map: any, progressCoords: [number, number][], lineC
   }
 }
 
+const BUILDINGS_LAYER_ID = "street-3d-buildings";
+const VECTOR_FALLBACK_SOURCE_ID = "openfreemap-tiles";
+
+function getFirstSymbolLayerId(map: any): string | undefined {
+  const layers = map.getStyle?.().layers ?? [];
+  const labelLayer = layers.find((layer: any) => layer.type === "symbol");
+  return labelLayer?.id;
+}
+
+function resolveVectorSource(map: any): string | null {
+  const sources = map.getStyle?.().sources ?? {};
+  if (sources.openmaptiles && (sources as any).openmaptiles.type === "vector") {
+    return "openmaptiles";
+  }
+
+  const firstVector = Object.entries(sources).find(
+    ([, src]) => (src as any).type === "vector"
+  );
+  if (firstVector) return firstVector[0];
+
+  if (!map.getSource(VECTOR_FALLBACK_SOURCE_ID)) {
+    map.addSource(VECTOR_FALLBACK_SOURCE_ID, {
+      type: "vector",
+      tiles: ["https://tiles.openfreemap.org/planet/{z}/{x}/{y}.pbf"],
+      maxzoom: 14,
+    });
+  }
+  return VECTOR_FALLBACK_SOURCE_ID;
+}
+
+function addStreetViewDepth(map: any) {
+  const sourceId = resolveVectorSource(map);
+  if (!sourceId) return;
+
+  if (!map.getLayer(BUILDINGS_LAYER_ID)) {
+    const beforeId = getFirstSymbolLayerId(map);
+    try {
+      map.addLayer(
+        {
+          id: BUILDINGS_LAYER_ID,
+          source: sourceId,
+          "source-layer": "building",
+          type: "fill-extrusion",
+          minzoom: 14,
+          paint: {
+            "fill-extrusion-color": [
+              "interpolate",
+              ["linear"],
+              ["coalesce", ["get", "render_height"], ["get", "height"], 0],
+              0,
+              "#d8dde7",
+              100,
+              "#c3ccd8",
+              200,
+              "#9aa7bb",
+            ],
+            "fill-extrusion-height": [
+              "max",
+              ["coalesce", ["get", "render_height"], ["get", "height"], 6],
+              6,
+            ],
+            "fill-extrusion-base": [
+              "coalesce",
+              ["get", "render_min_height"],
+              ["get", "min_height"],
+              0,
+            ],
+            "fill-extrusion-opacity": 0.92,
+          },
+        },
+        beforeId
+      );
+    } catch {
+      // If style doesn't support vector buildings, skip gracefully
+    }
+  }
+
+  try {
+    map.setFog({
+      color: "#d7e1ed",
+      "high-color": "#e8f0ff",
+      "horizon-blend": 0.05,
+      range: [0.8, 8],
+    });
+  } catch {
+    // Fog not available on all styles
+  }
+}
+
 export default function MapContainer({ activeIndex }: MapContainerProps) {
   const mapRef = useRef<MapRef>(null);
   const prevIndexRef = useRef(0);
-  const [revealedCCTVs, setRevealedCCTVs] = useState<Set<string>>(new Set());
   const pulseRef = useRef<number | null>(null);
   const { language } = useLanguage();
   const isNp = language === "np";
@@ -240,6 +327,15 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
   const progressCoords = PROTEST_ROUTE.slice(0, routeProgressIdx + 1);
   const lineColor = PHASE_LINE_COLORS[activeEvent.phase];
   const highlightColor = PHASE_HIGHLIGHT_COLORS[activeEvent.phase];
+  const revealedCCTVs = useMemo(() => {
+    const next = new Set<string>();
+    for (const [cctvId, revealIdx] of Object.entries(CCTV_REVEAL_AT)) {
+      if (activeIndex >= revealIdx) {
+        next.add(cctvId);
+      }
+    }
+    return next;
+  }, [activeIndex]);
 
   // Pulse animation for highlight ring
   const startPulse = useCallback((map: any) => {
@@ -265,19 +361,6 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
       if (pulseRef.current) cancelAnimationFrame(pulseRef.current);
     };
   }, []);
-
-  // Update revealed CCTVs (monotonic)
-  useEffect(() => {
-    setRevealedCCTVs((prev) => {
-      const next = new Set(prev);
-      for (const [cctvId, revealIdx] of Object.entries(CCTV_REVEAL_AT)) {
-        if (activeIndex >= revealIdx) {
-          next.add(cctvId);
-        }
-      }
-      return next.size !== prev.size ? next : prev;
-    });
-  }, [activeIndex]);
 
   // Fly camera + update route + set light preset
   useEffect(() => {
@@ -309,7 +392,6 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
     <div className="relative h-full w-full">
       <Map
         ref={mapRef}
-        mapboxAccessToken={MAPBOX_TOKEN}
         initialViewState={INITIAL_VIEW}
         mapStyle={MAP_STYLE_STANDARD}
         style={{ width: "100%", height: "100%" }}
@@ -317,6 +399,7 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
         interactive={false}
         onLoad={(e) => {
           const map = e.target;
+          addStreetViewDepth(map);
           addTerrain(map);
           addRouteLayers(map, progressCoords, lineColor);
           addHighlightLayers(map, activeEvent.coords, highlightColor);
@@ -327,7 +410,7 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
           const map = mapRef.current?.getMap();
           if (!map) return;
           setTimeout(() => {
-            if (!map.getSource("mapbox-dem")) addTerrain(map);
+            addStreetViewDepth(map);
             addRouteLayers(map, progressCoords, lineColor);
             if (!map.getSource("highlight-point")) {
               addHighlightLayers(map, activeEvent.coords, highlightColor);
