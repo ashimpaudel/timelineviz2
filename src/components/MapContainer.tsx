@@ -1,12 +1,13 @@
 "use client";
 
-import { useRef, useEffect, useMemo, useState, useCallback } from "react";
+import { useRef, useEffect, useMemo, useCallback } from "react";
 import Map, { NavigationControl, type MapRef } from "react-map-gl/mapbox";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 import { timelineEvents } from "@/data/timeline";
 import {
   MAPBOX_TOKEN,
+  USING_FALLBACK_MAPBOX_TOKEN,
   INITIAL_VIEW,
   PROTEST_ROUTE,
   getRouteProgressIndex,
@@ -14,7 +15,7 @@ import {
   CCTV_REVEAL_AT,
 } from "@/lib/constants";
 import type { Phase } from "@/lib/constants";
-import { MAP_STYLE_STANDARD } from "@/lib/mapStyles";
+import { MAP_STYLE_FALLBACK, MAP_STYLE_STANDARD } from "@/lib/mapStyles";
 import { animateCameraToIndex, setLightPreset, addTerrain } from "@/lib/cameraController";
 import { useLanguage } from "@/contexts/LanguageContext";
 import CctvMarkers from "./CctvMarker";
@@ -223,7 +224,6 @@ function updateRouteProgress(map: any, progressCoords: [number, number][], lineC
 export default function MapContainer({ activeIndex }: MapContainerProps) {
   const mapRef = useRef<MapRef>(null);
   const prevIndexRef = useRef(0);
-  const [revealedCCTVs, setRevealedCCTVs] = useState<Set<string>>(new Set());
   const pulseRef = useRef<number | null>(null);
   const { language } = useLanguage();
   const isNp = language === "np";
@@ -240,6 +240,17 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
   const progressCoords = PROTEST_ROUTE.slice(0, routeProgressIdx + 1);
   const lineColor = PHASE_LINE_COLORS[activeEvent.phase];
   const highlightColor = PHASE_HIGHLIGHT_COLORS[activeEvent.phase];
+  const mapStyle = USING_FALLBACK_MAPBOX_TOKEN ? MAP_STYLE_FALLBACK : MAP_STYLE_STANDARD;
+
+  const revealedCCTVs = useMemo(() => {
+    const next = new Set<string>();
+    for (const [cctvId, revealIdx] of Object.entries(CCTV_REVEAL_AT)) {
+      if (activeIndex >= revealIdx) {
+        next.add(cctvId);
+      }
+    }
+    return next;
+  }, [activeIndex]);
 
   // Pulse animation for highlight ring
   const startPulse = useCallback((map: any) => {
@@ -265,19 +276,6 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
       if (pulseRef.current) cancelAnimationFrame(pulseRef.current);
     };
   }, []);
-
-  // Update revealed CCTVs (monotonic)
-  useEffect(() => {
-    setRevealedCCTVs((prev) => {
-      const next = new Set(prev);
-      for (const [cctvId, revealIdx] of Object.entries(CCTV_REVEAL_AT)) {
-        if (activeIndex >= revealIdx) {
-          next.add(cctvId);
-        }
-      }
-      return next.size !== prev.size ? next : prev;
-    });
-  }, [activeIndex]);
 
   // Fly camera + update route + set light preset
   useEffect(() => {
@@ -307,11 +305,16 @@ export default function MapContainer({ activeIndex }: MapContainerProps) {
 
   return (
     <div className="relative h-full w-full">
+      {USING_FALLBACK_MAPBOX_TOKEN && (
+        <div className="absolute left-2 top-2 z-30 rounded bg-black/70 px-2 py-1 text-[10px] text-white/80">
+          Demo map token in use — set NEXT_PUBLIC_MAPBOX_TOKEN for production.
+        </div>
+      )}
       <Map
         ref={mapRef}
         mapboxAccessToken={MAPBOX_TOKEN}
         initialViewState={INITIAL_VIEW}
-        mapStyle={MAP_STYLE_STANDARD}
+        mapStyle={mapStyle}
         style={{ width: "100%", height: "100%" }}
         attributionControl={false}
         interactive={false}
